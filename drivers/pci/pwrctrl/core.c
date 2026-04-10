@@ -161,6 +161,22 @@ static void pci_pwrctrl_power_off_device(struct device_node *np)
 	if (!pdev)
 		return;
 
+	/*
+    * Sanity check to make sure that the node has the compatible property
+    * to allow driver binding.
+    */
+    if (!of_property_present(np, "compatible"))
+        return;
+
+	/*
+    * Check whether the pwrctrl device really needs to be created or not.
+    * This is decided based on at least one of the power supplies being
+    * defined in the devicetree node of the device.
+    */
+	if (!of_pci_supply_present(np)) {
+               //dev_dbg(parent, "Skipping OF node: %s\n", np->name);
+               return;
+    }
 	if (device_is_bound(&pdev->dev)) {
 		ret = __pci_pwrctrl_power_off_device(&pdev->dev);
 		if (ret)
@@ -216,6 +232,23 @@ static int pci_pwrctrl_power_on_device(struct device_node *np)
 	pdev = of_find_device_by_node(np);
 	if (!pdev)
 		return 0;
+
+	/*
+    * Sanity check to make sure that the node has the compatible property
+    * to allow driver binding.
+    */
+    if (!of_property_present(np, "compatible"))
+        return 0;
+
+    /*
+    * Check whether the pwrctrl device really needs to be created or not.
+    * This is decided based on at least one of the power supplies being
+    * defined in the devicetree node of the device.
+    */
+    if (!of_pci_supply_present(np)) {
+            //dev_dbg(parent, "Skipping OF node: %s\n", np->name);
+            return 0;
+    }
 
 	if (device_is_bound(&pdev->dev)) {
 		ret = __pci_pwrctrl_power_on_device(&pdev->dev);
