@@ -1232,7 +1232,7 @@ static void mhi_pci_recovery_work(struct work_struct *work)
 	if (err)
 		goto err_try_reset;
 
-	err = mhi_sync_power_up(mhi_cntrl);
+	err = mhi_async_power_up(mhi_cntrl);
 	if (err)
 		goto err_unprepare;
 
