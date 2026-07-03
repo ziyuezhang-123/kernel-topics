@@ -95,6 +95,12 @@ properties:
 
   vdda-refgen1p2-supply: true
 
+  # Only required on platforms where the hardware voting doesn't work properly
+  vdda-refgen-supply: true
+
+  # Only required on platforms where the hardware voting doesn't work properly
+  refgen-supply: true
+
   qcom,4ln-config-sel:
     description: PCIe 4-lane configuration
     $ref: /schemas/types.yaml#/definitions/phandle-array
